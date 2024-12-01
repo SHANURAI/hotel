@@ -1,0 +1,121 @@
+{% extends 'basic.html' %} {% block title %} staff panel {% endblock title %}
+ {% block body %}
+<h2>Номера</h2>
+<table>
+    <thead>
+        <th>Номер</th>
+        <th>Местоположение</th>
+        <th>Тип</th>
+        <th>Статус</th>
+        <th>Стоимость</th>
+        <th>Вместимость</th>
+        <th colspan="2">Действия</th>
+    </thead>
+    {% if rooms %} {% for each_room in rooms %}
+    <tr>
+        <td>{{each_room.room_number}}</td>
+        <td>{{each_room.hotel.location}} ({{each_room.hotel.name}})</td>
+        <td>{{each_room.get_room_type_display}}</td>
+        <td>{{each_room.get_status_display}}</td>
+        <td>{{each_room.price}}</td>
+        <td>{{each_room.capacity}}</td>
+        <td>
+            <form method="POST" action="{% url 'delete_room' each_room.hotel.id each_room.room_number %}">
+                {% csrf_token %}
+                <button type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %} {% endif %}
+</table>
+     <hr>
+<div class="modal" id="newroom">
+    <h4 class="modal-title">Добавить новый номер</h4>
+    <div class="modal-body">
+        <div class="container">
+            
+            <form action="/staff/panel/add-new-room" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="pwd">Номер:</label>
+                    <input type="number" class="form-control " id="capacity" name="roomnumber" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Тип номера:</label>
+                    <select class="form-control" name="roomtype" id="roomtype">
+                        <option value="3">Стандарт</option>
+                        <option value="2">Комфорт</option>
+                        <option value="1">Премиум</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Вместимость:</label>
+                    <input type="number" class="form-control " id="capacity" name="capacity" required>
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Стоимость:</label>
+                    <input type="mumber" class="form-control " id="price" name="price" required>
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Статус:</label>
+                    <select class="form-control" name="status" id="roomstatus">
+                        <option value="1">Доступен</option>
+                        <option value="2">Не доступен</option>
+                        
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Местоположение:</label>
+                    <select name="hotel">
+                        {% for each_location, eachid, each_name in location%}
+                        <option value={{eachid}}>{{each_location}} ({{each_name}})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit">Добавить номер</button>
+            </form>
+        </div>
+    </div>
+</div>
+     <hr>
+     <h2>Отели</h2>
+    <table>
+        <thead>
+            <th>Город</th>
+            <th>Название</th>
+            <th colspan="2">Действия</th>
+        </thead>
+        {% if hotels %} {% for each_hotel in hotels %}
+        <tr>
+            <td>{{each_hotel.location}}</td>
+            <td>{{each_hotel.name}}</td>
+            <td>
+                <form method="POST" action="{% url 'delete_hotel' each_hotel.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %} {% endif %}
+    </table>
+     <hr>
+     <div class="modal" id="newlocation">
+    <h4 class="modal-title">Добавить новый отель</h4>
+    <div>
+        <form action="/staff/panel/add-new-location" method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="city">Город:</label>
+                <input type="text" class="form-control " id="new_city" name="new_city" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Название:</label>
+                <input type="text" class="form-control " id="new_name" name="new_name" required> 
+            </div>
+            <button type="submit" class="btn btn-primary">Добавить отель</button>
+        </form>
+    </div>
+</div>
+{% endblock body %} 

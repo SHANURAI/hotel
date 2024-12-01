@@ -1,0 +1,68 @@
+{% extends 'basic.html' %}
+{% block title %}Edit Room
+{% endblock title %}
+{% block css %}
+{% endblock css %}
+{% block body %}
+<h1>Изменить данные о номере</h1>
+    <div>
+        <form action="/staff/panel/edit-room/edit" method="POST">
+            {%csrf_token%}
+            <div class="form-group">
+                <label for="pwd">Номер:</label>
+                <input type="number" class="form-control" id="roomnumber" name="roomnumber" value="{{room.roomnumber}}" disabled>
+            </div>
+            <div class="form-group">
+                <label for="email">Тип номера:</label>
+                <select class="form-control" name="roomtype" id="roomtype">
+                    <option  value=1>Премиум</option>
+                    <option  value=2>Комфорт</option>
+                    <option  value=3>Стандарт</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="pwd">Вместимость:</label>
+                <input type="number" class="form-control " id="capacity" name="capacity" value="{{room.capacity}}">
+            </div>
+            <div class="form-group">
+                <label for="pwd">Стоимость:</label>
+                <input type="mumber" class="form-control " id="price" name="price" value="{{room.price}}">
+            </div>
+            <div class="form-group">
+                <label for="pwd">Статус:</label>
+                <select class="form-control" name="status" id="status">
+                    <option value="1">Доступен</option>
+                    <option value="2">Не доступен</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="pwd">Местоположение:</label>
+                <input type="text" class="form-control " id="hotel" name="hotel" value="{{room.hotel.location}}" disabled>
+            </div>
+            <button type="submit" class="btn btn-danger">Сохранить</button>
+            <input type="hidden" name="room_id" value="{{room.id}}">
+            <input type="hidden" name="roomtypevalue" id="roomtypevalue" value="{{room.room_type}}">
+            <input type="hidden" name="roomstatus" id="roomstatus" value="{{room.status}}">
+            <input type="hidden" class="form-control " id="hotel" name="hotel" value="{{room.hotel.id}}">
+            <input type="hidden" class="form-control" id="roomnumber" name="roomnumber" value="{{room.roomnumber}}">
+        </form>
+    </div>
+{% endblock body %}
+{% block js %}
+    <script>
+    $(document).ready(function() {
+        var x = $("#roomtypevalue").val()
+        $("#roomtype").val(Number(x)).attr("selected", "selected");
+        var x = $("#roomstatus").val()
+        $("#status").val(Number(x)).attr("selected", "selected");
+    });
+    </script>
+{% endblock js %}
+    
+
+
+
+
+
+
+   

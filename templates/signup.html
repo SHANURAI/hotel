@@ -1,0 +1,32 @@
+{% extends 'basic.html' %}
+{% block title %}Регистрация{% endblock title %}
+{% block body %}
+<div>
+    <h2>Регистрация</h2>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form action="{% url 'signup' %}" method="post">
+        {% csrf_token %}
+        <label for="username_signup">Имя пользователя:</label>
+        <input type="text" id="username_signup" name="username" required>
+
+        <label for="password1">Пароль:</label>
+        <input type="password" id="password1" name="password1" required>
+
+        <label for="password2">Подтвердите пароль:</label>
+        <input type="password" id="password2" name="password2" required>
+
+        <input type="checkbox" id="is_staff" name="is_staff" {% if request.POST.is_staff %}checked{% endif %}>
+        <label for="is_staff">Зарегистрироваться как сотрудник</label>
+
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+</div>
+{% endblock body %}

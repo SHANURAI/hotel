@@ -1,0 +1,35 @@
+{% extends 'basic.html' %} {% block title %}Dashboard {% endblock title %} {% block body %}
+{% load app_tags %}
+<h3 class="text-center  text-success">Мои бронирования </h3>
+<table class="table">
+    <thead>
+        <th>Пользователь</th>
+        <th>Номер</th>
+        <th>Отель</th>
+        <th>Количество людей</th>
+        <th>Дата заезда</th>
+        <th>Дата выезда</th>
+        <th>Стоимость</th>
+        <th>Действия</th>
+    </thead>
+    {% for each_booking in bookings %}
+    <tr>
+        <td>{{each_booking.guest.username}}</td>
+        <td>{{each_booking.room.room_number}}</td>
+        <td>{{each_booking.room.hotel.location}} ({{each_booking.room.hotel.name}})</td>
+        <td>{{each_booking.room.capacity}}</td>
+        <td>{{each_booking.check_in}}</td>
+        <td>{{each_booking.check_out}}</td>
+        <td>{{each_booking.room.price}}</td>
+        <td>
+            <form method="POST" action="{% url 'cancel_booking' each_booking.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+
+
+</table>
+{% endblock body %}

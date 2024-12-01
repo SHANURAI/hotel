@@ -1,0 +1,62 @@
+    {% extends 'basic.html' %}
+    {% block title %}Гостиница
+    {% endblock title %}
+    {% block body %}
+     <!--Booking Section starts here-->
+    <section>
+        <div>
+            <form action="" method="POST">
+            {% csrf_token %}
+            <div>
+                <div>
+                    <label for="">Местоположение</label>
+                    <select name="search_location" id="roomstatus">
+                        <option>Выберите отель</option>
+                        {% for each_location,each_hotel_id, each_name in all_location %}
+                            <option value={{each_hotel_id}}>{{each_location}} ({{each_name}})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {%load app_tags%}
+                
+                <div>
+                    <input type="submit" value="Найти">
+                </div>
+                {% if rooms %}
+                <p class="text-center text-success">Доступные номера</p>
+                {% endif %}
+                
+            </div>
+            </form>
+
+        </div>
+    </section>
+    <!--Booking Section ends here-->
+    <!--Fetched reults appear here-->
+    <div class="container-fluid px-0 mx-aut">
+        {% if rooms %}
+           <table class="table">
+               <thead class="o">
+                <th>Тип</th>
+                <th>Город</th>
+                <th>Количество человек</th>
+                <th>Стоимость</th>
+                <th>Действия</th>
+            </thead>
+            {% for r in rooms %}
+                <tr class="">
+                    <td>{{ r.get_room_type_display }}</td>
+                    <td>{{ r.hotel.location }} ({{ r.hotel.name }})</td>
+                    <td>{{ r.capacity }}</td>
+                    <td>{{ r.price }}</td>
+                    {% if user.is_authenticated %}
+                        <td><a href="/user/book-room?room_id={{r.id}}"><button>Забронировать</button></a></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+           </table> 
+        {% endif %}
+    </div>
+    {% endblock body %}
+   
+   
