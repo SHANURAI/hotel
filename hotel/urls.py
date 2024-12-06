@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.urls import path
 import main.views as views
+from django.urls import path
+from main.views import HotelListAPIView, RoomListAPIView, ReservationListAPIView
+
 urlpatterns = [
     path('', views.homepage,name="homepage"),
     path('home', views.homepage,name="homepage"),
@@ -17,5 +20,8 @@ urlpatterns = [
     path('delete-hotel/<int:hotel_id>/', views.delete_hotel, name='delete_hotel'),
     path('signup', views.sign_up, name="signup"),
     path('login', views.login_user, name="login"),
-    path('logout', views.logout_user,name="logout")
+    path('logout', views.logout_user,name="logout"),
+    path('api/hotels/', HotelListAPIView.as_view(), name='api_hotels'),
+    path('api/rooms/', RoomListAPIView.as_view(), name='api_rooms'),
+    path('api/reservations/', ReservationListAPIView.as_view(), name='api_reservations'),
 ]

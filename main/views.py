@@ -10,7 +10,28 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import Hotels, Rooms, Reservation
+from .serializers import HotelSerializer, RoomSerializer, ReservationSerializer
 
+class HotelListAPIView(APIView):
+    def get(self, request):
+        hotels = Hotels.objects.all()
+        serializer = HotelSerializer(hotels, many=True)
+        return Response(serializer.data)
+
+class RoomListAPIView(APIView):
+    def get(self, request):
+        rooms = Rooms.objects.all()
+        serializer = RoomSerializer(rooms, many=True)
+        return Response(serializer.data)
+
+class ReservationListAPIView(APIView):
+    def get(self, request):
+        reservations = Reservation.objects.all()
+        serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data)
 
 def homepage(request):
     # Получение всех доступных местоположений
@@ -208,7 +229,7 @@ def handler404(request):
 
 def user_bookings(request):
     if request.user.is_authenticated == False:
-        return redirect('userloginpage')
+        return redirect('login')
     user = User.objects.all().get(id=request.user.id)
     print(f"request user id ={request.user.id}")
     bookings = Reservation.objects.all().filter(guest=user)
